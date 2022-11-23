@@ -1,0 +1,32 @@
+.checklist {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: var(--spacing-xs);
+}
+
+.checklist--column {
+  grid-template-columns: repeat(auto-fit, minmax(30ch, 1fr));
+  gap: var(--spacing-md) var(--spacing-xs);
+}
+
+.checklist__item {
+  padding-left: 2rem;
+  position: relative;
+}
+
+.checklist__item::before {
+  content: '';
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  left: 0;
+  top: 3%;
+}
+
+.checklist--orange .checklist__item::before {
+  background: url('../../assets/check-orange.svg') no-repeat center center;
+}
+
+.checklist--black .checklist__item::before {
+  background: url('../../assets/check-black.svg') no-repeat center center;
+}

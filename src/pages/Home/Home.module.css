@@ -157,17 +157,3 @@
   color: var(--color-white);
   padding: 0 var(--side-padding) var(--spacing-xxl);
 }
-
-.benefits__list {
-  gap: var(--spacing-lg);
-}
-
-.benefits__item {
-  padding-left: 2.5rem;
-}
-
-.benefits__item__description {
-  color: var(--color-sand);
-  margin-top: var(--spacing-xs);
-  opacity: 0.65;
-}

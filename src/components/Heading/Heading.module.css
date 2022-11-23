@@ -1,0 +1,12 @@
+.heading {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  font-weight: normal;
+  line-height: 110%;
+}
+
+@media (max-width: 25rem) {
+  .heading {
+    font-size: 1.25rem;
+  }
+}

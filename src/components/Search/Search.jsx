@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import style from './Search.module.css';
 
 import Checkbox from '../Checkbox/Checkbox';
+import Heading from '../Heading/Heading';
 
 import categories from '../../data/categories.json';
 import siren from '../../assets/siren.svg';
@@ -166,7 +167,7 @@ const Search = ({ userZipCode = '', userSelectedCategories = [] }) => {
     <div className={style.search}>
       <div className={style.search__box}>
         <div className={style.search__content}>
-          <h2 className="heading">Encontre pontos de coleta próximos a você:</h2>
+          <Heading level="h2">Encontre pontos de coleta próximos a você:</Heading>
         </div>
         <form className={style.search__form} method="GET" onSubmit={handleSubmit}>
           <div className="field">

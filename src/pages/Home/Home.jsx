@@ -4,16 +4,20 @@ import Search from '../../components/Search/Search';
 import earth from '../../assets/earth.png';
 import earthDesktop from '../../assets/earth-desktop.png';
 
+import Container from '../../components/Container/Container.jsx';
+import CheckList from '../../components/CheckList/CheckList.jsx';
+import Heading from '../../components/Heading/Heading.jsx';
+import Stack from '../../components/Stack/Stack.jsx';
+import Paragraph from '../../components/Paragraph/Paragraph.jsx';
+
 const Home = () => {
   return (
     <main className="main">
       <section className={style.hero}>
-        <div className="container">
-          <h1 className={`display display--small ${style.hero__title}`}>
-            Descarte o seu <em>lixo eletrônico</em> de forma consciente em <em>Sorocaba</em>
-          </h1>
+        <Container>
+          <h1 className={`display display--small ${style.hero__title}`}>Descarte o seu <em>lixo eletrônico</em> de forma consciente em <em>Sorocaba</em></h1>
           <Search />
-        </div>
+        </Container>
       </section>
 
       <section className={style.whyRecycle} id="por-que-reciclar">
@@ -48,34 +52,46 @@ const Home = () => {
       </section>
 
       <section className={style.benefits}>
-        <div className="container container--compact">
-          <ul className={`${style.benefits__list} checklist checklist--orange`}>
-            <li className={style.benefits__item}>
-              <h2 className="heading">Salve o meio ambiente</h2>
-              <p className={style.benefits__item__description}>Reduzindo a extracão de matéria-prima para utilização nas indústrias.</p>
-            </li>
-            <li className={style.benefits__item}>
-              <h2 className="heading">Salve dinheiro</h2>
-              <p className={style.benefits__item__description}>Promovendo a ecônomia</p>
-            </li>
-            <li className={style.benefits__item}>
-              <h2 className="heading">Salve espaço</h2>
-              <p className={style.benefits__item__description}>Conservando recursos e energia</p>
-            </li>
-            <li className={style.benefits__item}>
-              <h2 className="heading">Salve vidas</h2>
-              <p className={style.benefits__item__description}>Evitando a contaminação</p>
-            </li>
-            <li className={style.benefits__item}>
-              <h2 className="heading">Salve o futuro</h2>
-              <p className={style.benefits__item__description}>Preservando o planeta</p>
-            </li>
-            <li className={style.benefits__item}>
-              <h2 className="heading">Beneficie a sua comunidade</h2>
-              <p className={style.benefits__item__description}>Contribuindo para o bem-estar</p>
-            </li>
-          </ul>
-        </div>
+        <Container variant="compact">
+          <CheckList color="orange" layout="column">
+            <CheckList.Item>
+              <Stack size="small">
+                <Heading level="h2">Salve o meio ambiente</Heading>
+                <Paragraph color="sand">Reduzindo a extracão de matéria-prima para utilização nas indústrias.</Paragraph>
+              </Stack>
+            </CheckList.Item>
+            <CheckList.Item>
+              <Stack size="small">
+                <Heading level="h2">Salve dinheiro</Heading>
+                <Paragraph color="sand">Promovendo a ecônomia</Paragraph>
+              </Stack>
+            </CheckList.Item>
+            <CheckList.Item>
+              <Stack size="small">
+                <Heading level="h2">Salve espaço</Heading>
+                <Paragraph color="sand">Conservando recursos e energia</Paragraph>
+              </Stack>
+            </CheckList.Item>
+            <CheckList.Item>
+              <Stack size="small">
+                <Heading level="h2">Salve vidas</Heading>
+                <Paragraph color="sand">Evitando a contaminação</Paragraph>
+              </Stack>
+            </CheckList.Item>
+            <CheckList.Item>
+              <Stack size="small">
+                <Heading level="h2">Salve o futuro</Heading>
+                <Paragraph color="sand">Preservando o planeta</Paragraph>
+              </Stack>
+            </CheckList.Item>
+            <CheckList.Item>
+              <Stack size="small">
+                <Heading level="h2">Beneficie a sua comunidade</Heading>
+                <Paragraph color="sand">Contribuindo para o bem-estar</Paragraph>
+              </Stack>
+            </CheckList.Item>
+          </CheckList>
+        </Container>
       </section>
     </main>
   );

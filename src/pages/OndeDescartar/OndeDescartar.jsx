@@ -3,6 +3,7 @@ import style from './OndeDescartar.module.css';
 
 import Search from '../../components/Search/Search';
 import Results from '../../components/Results/Results';
+import Container from '../../components/Container/Container.jsx';
 
 const OndeDescartar = () => {
   const [isFiltered, setIsFiltered] = useState(false);
@@ -22,17 +23,17 @@ const OndeDescartar = () => {
   return (
     <main className="main">
       <section className={style.hero}>
-        <div className="container">
+        <Container>
           <h1 className="display display--medium">Onde descartar?</h1>
           <Search userZipCode={userZipCode} userSelectedCategories={userSelectedCategories} />
-        </div>
+        </Container>
       </section>
 
       <section className={style.archive}>
-        <div className="container">
+        <Container>
           {isFiltered && <Results userSelectedCategories={userSelectedCategories} userCoordinates={userCoordinates} />}
           {!isFiltered && <p className={style.archive__message}>Preencha o filtro e mostraremos os locais próximos a você!</p>}
-        </div>
+        </Container>
       </section>
     </main>
   );

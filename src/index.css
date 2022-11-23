@@ -197,25 +197,6 @@ strong {
  *
  */
 
-.container {
-  width: 100%;
-  max-width: 77.5rem;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.container--narrow {
-  max-width: 60rem;
-}
-
-.container--compact {
-  max-width: 45rem;
-}
-
-/**
- *
- */
-
 .display {
   font-family: 'DM Serif Display', serif;
   line-height: 0.9;
@@ -287,23 +268,6 @@ strong {
  *
  */
 
-.heading {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.5rem;
-  font-weight: normal;
-  line-height: 110%;
-}
-
-@media (max-width: 25rem) {
-  .heading {
-    font-size: 1.25rem;
-  }
-}
-
-/**
- *
- */
-
 .button {
   background: var(--bg-orange-noise);
   color: var(--color-black);
@@ -344,38 +308,6 @@ strong {
 
 .icon {
   width: 1.125rem;
-}
-
-/**
- *
- */
-
-:where(.checklist) {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(30ch, 1fr));
-  gap: var(--spacing-xs);
-}
-
-:where(.checklist li) {
-  padding-left: 2rem;
-  position: relative;
-}
-
-.checklist > li::before {
-  content: '';
-  position: absolute;
-  width: 1.5rem;
-  height: 1.5rem;
-  left: 0;
-  top: 3%;
-}
-
-.checklist--orange > li::before {
-  background: url('./assets/check-orange.svg') no-repeat center center;
-}
-
-.checklist--black > li::before {
-  background: url('./assets/check-black.svg') no-repeat center center;
 }
 
 /**

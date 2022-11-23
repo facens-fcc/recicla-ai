@@ -1,0 +1,8 @@
+.stack {
+  display: grid;
+  grid-auto-rows: min-content;
+}
+
+.stack--small {
+  grid-gap: 0.5rem;
+}
