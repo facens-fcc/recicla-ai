@@ -4,9 +4,10 @@ import style from './Results.module.css';
 import Companies from '../../data/companies.json';
 import Card from '../Card/Card';
 
-const Results = ({ userSelectedCategories = [], userCoordinates = [] }) => {
+const Results = ({ userSelectedCategories = [], userCoordinates }) => {
   const [categories, setCategories] = useState([]);
   const [companies, setCompanies] = useState(Companies);
+  const [coordinates, setCoordinates] = useState(userCoordinates);
   const [filteredCompanies, setFilteredCompanies] = useState([]);
 
   useEffect(() => {
@@ -71,7 +72,7 @@ const Results = ({ userSelectedCategories = [], userCoordinates = [] }) => {
       </p>
       <ul className={style.results__list}>
         {filteredCompanies.map((company) => (
-          <Card key={company.id} company={company} />
+          <Card key={company.id} company={company} userCoordinates={coordinates} />
         ))}
       </ul>
     </>

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Loader } from 'google-maps';
+
 import style from './Search.module.css';
 
 import Checkbox from '../Checkbox/Checkbox';
@@ -116,26 +118,38 @@ const Search = ({ userZipCode = '', userSelectedCategories = [] }) => {
 
   /**
    * Validate if the zipCode is valid through the Google Maps API.
-   * If the zipCode is valid, set the address and coordinates states.
+   * Get Latitude and Longitude from the zipCode if it is valid.
+   * Set Latitude and Longitude to the coordinates state and set isZipCodeValid to true.
+   * Remove non-digits from the zipCode.
+   * Prevent "You have included the Google Maps JavaScript API multiple times on this page. This may cause unexpected errors." error.
    */
 
-  const getAdressData = async (zipCode) => {
-    const zipCodeValue = zipCode.replace(/\D/g, '');
+  const validateZipCode = async (zipCode) => {
+    const loader = new Loader('AIzaSyDdE2m_2nAtfQN9CA3emww375xD5CELjiU');
+    const google = await loader.load();
 
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${zipCodeValue}&key=AIzaSyDdE2m_2nAtfQN9CA3emww375xD5CELjiU`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === 'OK') {
+    const geocoder = new google.maps.Geocoder();
+
+    return new Promise((resolve, reject) => {
+      geocoder.geocode({ address: zipCode }, (results, status) => {
+        if (status === 'OK') {
+          const { lat, lng } = results[0].geometry.location;
+
+          setCoordinates({ lat: lat(), lng: lng() });
           setZipCodeValid(true);
-          setCoordinates(data.results[0].geometry.location);
+          resolve(true);
         } else {
           setZipCodeValid(false);
-          setCoordinates(null);
+          reject(false);
         }
-      })
-      .catch((error) => {
-        console.log(error);
       });
+    });
+  };
+
+  const getAdressData = async (zipCode) => {
+    const zipCodeWithoutHyphen = zipCode.replace('-', '');
+
+    await validateZipCode(zipCodeWithoutHyphen);
   };
 
   /**

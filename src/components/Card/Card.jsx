@@ -1,9 +1,11 @@
 import React from 'react';
+import Distance from '../Distance/Distance';
+
 import style from './Card.module.css';
 
 import iconEnvironment from '../../assets/environment.svg';
 
-const Card = ({ company }) => {
+const Card = ({ company, userCordinates }) => {
   const { name, address, whatsapp, phone, payment, residential_collection, selective_collection } = company;
 
   const formatPhone = (phone) => {
@@ -20,7 +22,7 @@ const Card = ({ company }) => {
     <li className={style.card}>
       <div className={style.card__header}>
         <h3 className={`${style.card__title} heading`}>{name}</h3>
-        <p>{address.distance < 1 ? `${Math.round(address.distance * 1000)}m` : `${Math.round(address.distance)}km`} de distância</p>
+        <Distance origin={userCordinates} destination={[address.lat, address.lng]} />
         <p>
           {address.street}, {address.city}, {address.state}
         </p>
