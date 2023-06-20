@@ -1,4 +1,3 @@
-import React from 'react';
 import style from './Footer.module.css';
 import Brand from '../Brand/Brand';
 
@@ -6,7 +5,7 @@ const Footer = () => {
   const isHomePage = window.location.pathname === '/';
 
   return (
-    <footer className={`${style.footer} ${isHomePage ? style.footerDark : ''}`}>
+    <footer className={`${style.footer} ${isHomePage && style.footerDark}`}>
       <div className="container container--narrow">
         <div className={style.footer__wrapper}>
           <Brand />

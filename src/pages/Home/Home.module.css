@@ -1,5 +1,5 @@
 .hero {
-  padding: var(--spacing-md) 1.5rem 0;
+  padding: var(--spacing-md) var(--side-spacing) 0;
 }
 
 .hero__title {
@@ -16,7 +16,7 @@
  */
 
 .whyRecycle {
-  padding: var(--spacing-xxl) var(--side-padding);
+  padding: var(--spacing-xxl) var(--side-spacing);
   text-align: center;
 }
 
@@ -82,7 +82,7 @@
 .worldCount {
   background: var(--bg-noise-black);
   color: var(--color-white);
-  padding: var(--spacing-xxl) var(--side-padding) 0;
+  padding: var(--spacing-xxl) var(--side-spacing) 0;
   position: relative;
 }
 
@@ -109,12 +109,12 @@
 
 .worldCount__earth {
   width: 100%;
-  min-width: calc(100% + 2 * var(--side-padding));
+  min-width: calc(100% + 2 * var(--side-spacing));
   height: clamp(25rem, 50vw, 56.25rem);
   object-fit: cover;
 
   position: relative;
-  left: calc(-1 * var(--side-padding));
+  left: calc(-1 * var(--side-spacing));
 }
 
 .worldCount__earth__image {
@@ -155,7 +155,7 @@
 .benefits {
   background: var(--bg-noise-black);
   color: var(--color-white);
-  padding: 0 var(--side-padding) var(--spacing-xxl);
+  padding: 0 var(--side-spacing) var(--spacing-xxl);
 }
 
 .benefits__list {

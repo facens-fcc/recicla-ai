@@ -1,0 +1,7 @@
+.select {
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 29 21' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.5 6h-1.3c-.1 0-.2 0-.2.1L9 13 4 6.1C4 6 3.9 6 3.8 6H2.5c-.2 0-.2.1-.2.2l6.2 8.5c.2.3.7.3.9 0l6.2-8.5c.1-.1.1-.2-.1-.2z' fill='%2355596a'/%3E%3C/svg%3E");
+  background-position: 100%;
+  background-repeat: no-repeat;
+  background-size: 2em;
+}

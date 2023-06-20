@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import style from './Nav.module.css';
 
 import Brand from '../Brand/Brand';
@@ -89,11 +89,26 @@ const Nav = () => {
    */
 
   const links = [
-    { name: 'Início', url: '/' },
-    { name: 'Por que reciclar?', url: '/#por-que-reciclar' },
-    { name: 'Onde descartar?', url: '/onde-descartar/' },
-    { name: 'Cadastro para empresas', url: 'https://docs.google.com/forms/d/e/1FAIpQLSfgJz_tUJcSYwrfeFvPi2J4R6IVz4XS768srHT82WIm2s_mnw/viewform', openInNewTab: true },
-    { name: 'Contato', url: 'https://docs.google.com/forms/d/e/1FAIpQLSfhJKpZWB0m6akjqDgRwUry90EeyU3IfTmV_1WsCVZpwxA0Lg/viewform', openInNewTab: true },
+    {
+      name: 'Início',
+      url: '/',
+    },
+    {
+      name: 'Por que reciclar?',
+      url: '/#por-que-reciclar',
+    },
+    {
+      name: 'Onde descartar?',
+      url: '/onde-descartar/',
+    },
+    {
+      name: 'Cadastro para empresas',
+      url: '/cadastro-para-empresas/',
+    },
+    {
+      name: 'Contato',
+      url: '/contato/',
+    },
   ];
 
   return (

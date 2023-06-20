@@ -1,21 +1,38 @@
 import React from 'react';
 import style from './Home.module.css';
 
-import Search from '../../components/Search/Search';
+import Search from '../../components/Search/Search.jsx';
 
 import earth from '../../assets/earth.png';
 import earthDesktop from '../../assets/earth-desktop.png';
 import Marquee from '../../components/Marquee/Marquee.jsx';
 
-const Home = () => {
+const Home = ({
+  categories,
+  selectedCategories,
+  setSelectedCategories,
+  userCoordinates,
+  setUserCoordinates,
+  userZipCode,
+  setUserZipCode,
+}) => {
   return (
     <main className="main">
       <section className={style.hero}>
         <div className="container">
           <h1 className={`display display--small ${style.hero__title}`}>
-            Descarte o seu <em>lixo eletrônico</em> de forma consciente em <em>Sorocaba</em>
+            Descarte o seu <em>lixo eletrônico</em> de forma consciente em{' '}
+            <em>Sorocaba</em>
           </h1>
-          <Search />
+          <Search
+            categories={categories}
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+            userCoordinates={userCoordinates}
+            setUserCoordinates={setUserCoordinates}
+            userZipCode={userZipCode}
+            setUserZipCode={setUserZipCode}
+          />
         </div>
       </section>
 
@@ -24,7 +41,7 @@ const Home = () => {
       <section className={style.whyRecycle} id="por-que-reciclar">
         <figure className={style.whyRecycle__quote}>
           <blockquote className={`${style.whyRecycle__quote__content} display display--medium`} cite="https://www.theworldcounts.com/challenges/waste/electronic-waste-facts">
-            Mais de <span className="display__hightlight">80%</span> do lixo eletrônico e eletrodométisco não é reciclado
+            Mais de <span className="hightlight">80%</span> do lixo eletrônico e eletrodométisco não é reciclado
           </blockquote>
           <figcaption className={style.whyRecycle__quote__source}>
             —<cite>World Economic Forum</cite>

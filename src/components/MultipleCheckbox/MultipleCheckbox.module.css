@@ -1,0 +1,42 @@
+.multipleCheckbox {
+  position: relative;
+}
+
+.multipleCheckbox::after {
+  content: '';
+  position: absolute;
+  width: 1.5em;
+  height: 1.5em;
+  right: 0.5em;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16.2 6H14.9C14.8 6 14.7 6 14.7 6.1L9.7 13L4.7 6.1C4.7 6 4.6 6 4.5 6H3.2C3 6 3 6.1 3 6.2L9.2 14.7C9.4 15 9.9 15 10.1 14.7L16.3 6.2C16.4 6.1 16.4 6 16.2 6V6Z' fill='black'/%3E%3C/svg%3E%0A");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.multipleCheckbox[aria-expanded='true']::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.multipleCheckboxDialog[aria-hidden='true'] {
+  display: none;
+}
+
+.multipleCheckboxDialog {
+  background: var(--bg-noise-sand);
+  border: 1px solid var(--color-black);
+  border-radius: var(--radius-md);
+  padding: 1em;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 62rem) {
+  .multipleCheckboxDialog {
+    position: absolute;
+    z-index: var(--z-index-md);
+  }
+}

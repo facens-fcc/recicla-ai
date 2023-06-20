@@ -4,9 +4,8 @@
   letter-spacing: 0.01em;
   text-decoration: none;
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  width: max-content;
 
   height: var(--button-height);
   line-height: var(--button-height);

@@ -1,80 +1,74 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import style from './Results.module.css';
+import Card from '../Card/Card.jsx';
 
-import Companies from '../../data/companies.json';
-import Card from '../Card/Card';
+/**
+ * Get the length of the companies array.
+ * Return the total number of companies with the label in the plural or singular.
+ */
 
-const Results = ({ userSelectedCategories = [], userCoordinates = [] }) => {
-  const [categories, setCategories] = useState([]);
-  const [companies, setCompanies] = useState(Companies);
+const getTotalResults = (companies) => {
+  const total = companies.length;
+  const plural = total !== 1;
+  return `${total} ${plural ? 'locais' : 'local'}`;
+};
+
+/**
+ * Calculates the distance between two points in km using the Haversine formula.
+ * @link https://www.movable-type.co.uk/scripts/latlong.html
+ */
+
+const calculateDistance = (origin, destination) => {
+  const toRad = (value) => (value * Math.PI) / 180; // Converts numeric degrees to radians
+  const R = 6371; // Radius of the earth in km
+  const dLat = toRad(destination[0] - origin[0]);
+  const dLon = toRad(destination[1] - origin[1]);
+  const lat1 = toRad(origin[0]);
+  const lat2 = toRad(destination[0]);
+
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = R * c;
+  return d;
+};
+
+const Results = ({ companies, selectedCategories, userCoordinates, userZipCode }) => {
   const [filteredCompanies, setFilteredCompanies] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setCategories(userSelectedCategories);
-    setCompanies(companiesWithDistance);
-  }, []);
+    const companiesFiltered = companies.filter((company) => {
+      return company.categories.some((category) => selectedCategories.includes(category.id));
+    });
 
-  useEffect(() => {
-    setFilteredCompanies(filterCompaniesByCategory.sort((a, b) => a.address.distance - b.address.distance));
+    const companiesWithDistance = companiesFiltered.map((company) => {
+      return {
+        ...company,
+        distance: calculateDistance([userCoordinates.lat, userCoordinates.lng], [company.lat, company.lng]),
+      };
+    });
+
+    setFilteredCompanies(companiesWithDistance.sort((a, b) => a.distance - b.distance));
+    setLoading(false);
   }, [companies]);
 
-  /**
-   * Calculates the distance between two points in km using the Haversine formula.
-   * @link https://www.movable-type.co.uk/scripts/latlong.html
-   */
-
-  const calculateDistance = (origin, destination) => {
-    const toRad = (value) => (value * Math.PI) / 180; // Converts numeric degrees to radians
-    const R = 6371; // Radius of the earth in km
-    const dLat = toRad(destination[0] - origin[0]);
-    const dLon = toRad(destination[1] - origin[1]);
-    const lat1 = toRad(origin[0]);
-    const lat2 = toRad(destination[0]);
-
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c;
-    return d;
-  };
-
-  /**
-   * Calculates the distance between the user and the company.
-   * Sets the distance in the company address object.
-   */
-
-  const companiesWithDistance = companies.map((company) => {
-    const companyCoordinates = [company.address.lat, company.address.lng];
-    const distance = calculateDistance(userCoordinates, companyCoordinates);
-    company.address.distance = distance;
-    return company;
-  });
-
-  /**
-   * Filters the companies by the selected categories.
-   * If the company has all the selected categories, it is added to the filteredCompanies array.
-   */
-
-  const filterCompaniesByCategory = companies.filter((company) => {
-    const companyCategories = company.categories;
-    const hasAllCategories = categories.every((category) => companyCategories.includes(category));
-    return hasAllCategories;
-  });
-
   return (
-    <>
-      <p className={style.results__counter}>
-        Encontramos{' '}
-        <strong>
-          {filteredCompanies.length} {filteredCompanies.length === 1 ? 'local' : 'locais'}
-        </strong>{' '}
-        próximos a você!
-      </p>
-      <ul className={style.results__list}>
+    <div className={style.results}>
+      <div className={style.resultsCounter}>
+        {loading ? (
+          // prettier-ignore
+          <p>Carregando..</p>
+        ) : (
+          // prettier-ignore
+          <p>Encontramos <strong>{getTotalResults(filteredCompanies)}</strong> próximos a você!</p>
+        )}
+      </div>
+      <ul className={style.resultsList}>
         {filteredCompanies.map((company) => (
           <Card key={company.id} company={company} />
         ))}
       </ul>
-    </>
+    </div>
   );
 };
 

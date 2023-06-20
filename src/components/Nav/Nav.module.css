@@ -9,7 +9,7 @@
 
 .menu__wrapper {
   display: none;
-  padding: 0 var(--side-padding);
+  padding: 0 var(--side-spacing);
 }
 
 .menu__list {

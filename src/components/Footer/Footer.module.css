@@ -1,6 +1,6 @@
 .footer {
   grid-area: footer;
-  padding: var(--spacing-md) var(--side-padding) var(--spacing-xl);
+  padding: var(--spacing-md) var(--side-spacing) var(--spacing-xl);
 }
 
 .footerDark {

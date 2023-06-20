@@ -1,110 +1,65 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import style from './Search.module.css';
 
-import Checkbox from '../Checkbox/Checkbox';
-
-import categories from '../../data/categories.json';
 import siren from '../../assets/siren.svg';
+
 import Button from '../Button/Button.jsx';
+import Checkbox from '../Checkbox/Checkbox.jsx';
+import Input from '../Input/Input.jsx';
+import MultipleCheckbox from '../MultipleCheckbox/MultipleCheckbox.jsx';
 
-const Search = ({ userZipCode = '', userSelectedCategories = [] }) => {
-  const dropdownRef = React.useRef();
-  const dropdownButtonRef = React.useRef();
-  const zipCodeRef = React.useRef();
-
-  const sortedCategories = categories.sort((a, b) => {
-    if (a.label < b.label) return -1;
-    if (a.label > b.label) return 1;
-    return 0;
-  });
-
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
-
-  const [zipCode, setZipCode] = useState(userZipCode);
-  const [isZipCodeValid, setZipCodeValid] = useState(false);
-
-  const [selectedCategories, setSelectedCategories] = useState(userSelectedCategories);
-  const [isCategoryValid, setCategoryValid] = useState(false);
-
+const Search = ({ categories, selectedCategories, setSelectedCategories, userCoordinates, setUserCoordinates, userZipCode, setUserZipCode }) => {
+  const [isZipCodeValid, setZipCodeValid] = useState();
+  const [isCategorySelected, setCategorySelected] = useState();
   const [isFormValid, setFormValid] = useState();
 
-  const [coordinates, setCoordinates] = useState(null);
-
   useEffect(() => {
-    document.addEventListener('click', handleDropdownClickOutside);
-    document.addEventListener('keydown', handleDropdownEscape);
-
-    return () => {
-      document.removeEventListener('click', handleDropdownClickOutside);
-      document.removeEventListener('keydown', handleDropdownEscape);
-    };
-  }, [isDropdownOpen]);
-
-  useEffect(() => {
-    selectedCategories.length > 0 ? setCategoryValid(true) : setCategoryValid(false);
+    setCategorySelected(selectedCategories.length > 0);
   }, [selectedCategories]);
 
   useEffect(() => {
-    zipCode.length === 9 ? setZipCodeValid(true) : setZipCodeValid(false);
-  }, [zipCode]);
+    userZipCode.length === 9 ? setZipCodeValid(true) : setZipCodeValid(false);
+  }, [userZipCode]);
 
   useEffect(() => {
-    isZipCodeValid && getAdressData(zipCode);
+    isZipCodeValid && getCoordinatesFromZipCode(userZipCode);
   }, [isZipCodeValid]);
 
   /**
-   * Dropdown
-   *  • Open/close dropdown,
-   *  • Close dropdown when clicking outside or pressing escape.
-   *  • Update label according to the length of the selected categories.
+   * Get the coordinates from the zipCode.
+   * Return the latitude and longitude of the zipCode.
    */
 
-  const handleDropdown = () => {
-    setDropdownOpen(!isDropdownOpen);
-  };
+  const getCoordinatesFromZipCode = async (zipCode) => {
+    const value = zipCode.replace(/\D/g, '');
+    const api = `https://maps.googleapis.com/maps/api/geocode/json?address=${value}&key=AIzaSyCDVRS2y-aVIXVmiyXnrCfg9ZiDBEiHQJM`;
 
-  const handleDropdownClickOutside = ({ target }) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(target)) {
-      setDropdownOpen(false);
-    }
-  };
-
-  const handleDropdownEscape = ({ key }) => {
-    if (key === 'Escape') {
-      setDropdownOpen(false);
-    }
-  };
-
-  const handleDropdownLabel = () => {
-    if (selectedCategories.length === 0) return 'Selecione';
-    if (selectedCategories.length === 1) return `(${selectedCategories.length}) Selecionado`;
-    if (selectedCategories.length > 1) return `(${selectedCategories.length}) Selecionados`;
+    fetch(api)
+      .then((response) => response.json())
+      .then((data) => {
+        const coordinates = data.results[0].geometry.location;
+        setUserCoordinates(coordinates);
+        setZipCodeValid(true);
+      })
+      .catch((error) => {
+        setZipCodeValid(false);
+      });
   };
 
   /**
-   * Add and remove category from selectedCategories array when clicking on the category.
-   * If the category is already selected, remove it from the array.
+   * Get the label for the select component.
+   * Change the label according to the number of selected categories.
    */
 
-  const handleCheckboxChange = ({ target }) => {
-    const { name, checked } = target;
-
-    if (checked) {
-      setSelectedCategories([...selectedCategories, name]);
+  const getSelectLabel = () => {
+    if (selectedCategories.length === 0) {
+      return 'Selecione';
+    } else if (selectedCategories.length === 1) {
+      return `(${selectedCategories.length}) Selecionado`;
     } else {
-      setSelectedCategories(selectedCategories.filter((category) => category !== name));
+      return `(${selectedCategories.length}) Selecionados`;
     }
   };
-
-  /**
-   * Mark the checkbox as checked with the selectedCategories array.
-   */
-
-  useEffect(() => {
-    document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-      userSelectedCategories.includes(checkbox.name) && (checkbox.checked = true);
-    });
-  }, []);
 
   /**
    * Set input mask while the user is typing.
@@ -115,34 +70,21 @@ const Search = ({ userZipCode = '', userSelectedCategories = [] }) => {
   const handleZipCodeChange = ({ target }) => {
     const zipCode = target.value
       .replace(/\D/g, '') // Remove all non-digits.
-      .replace(/(\d{5})(\d)/, '$1-$2') // Add a hyphen after the fifth digit.
-      .replace(/(-\d{3})\d+?$/, '$1'); // Limit to 9 digits.
-
-    setZipCode(zipCode);
+      .replace(/(\d{5})(\d)/, '$1-$2'); // Add a hyphen after the fifth digit.
+    setUserZipCode(zipCode);
   };
 
   /**
-   * Validate if the zipCode is valid through the Google Maps API.
-   * If the zipCode is valid, set the address and coordinates states.
+   * Add and remove category from selectedCategories array when clicking on the category.
+   * If the category is already selected, remove it from the array.
    */
 
-  const getAdressData = async (zipCode) => {
-    const zipCodeValue = zipCode.replace(/\D/g, '');
-
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${zipCodeValue}&key=AIzaSyCDVRS2y-aVIXVmiyXnrCfg9ZiDBEiHQJM`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === 'OK') {
-          setZipCodeValid(true);
-          setCoordinates(data.results[0].geometry.location);
-        } else {
-          setZipCodeValid(false);
-          setCoordinates(null);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const handleCategoryChange = (categoryId) => {
+    if (selectedCategories.includes(categoryId)) {
+      setSelectedCategories(selectedCategories.filter((id) => id !== categoryId));
+    } else {
+      setSelectedCategories([...selectedCategories, categoryId]);
+    }
   };
 
   /**
@@ -153,19 +95,17 @@ const Search = ({ userZipCode = '', userSelectedCategories = [] }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (isZipCodeValid && !isCategoryValid) {
-      setFormValid(false);
-      dropdownButtonRef.current.focus();
+    if (!isZipCodeValid || !isCategorySelected) {
+      setFormValid(isZipCodeValid && isCategorySelected);
     }
 
-    if ((!isZipCodeValid && isCategoryValid) || (!isZipCodeValid && !isCategoryValid)) {
-      setFormValid(false);
-      zipCodeRef.current.focus();
-    }
+    if (isZipCodeValid && isCategorySelected) {
+      const zipcode = `zipCode=${userZipCode}`;
+      const coordinates = `lat=${userCoordinates.lat}&lng=${userCoordinates.lng}`;
+      const categories = `categories=${selectedCategories}`;
 
-    if (isZipCodeValid && isCategoryValid) {
-      setFormValid(true);
-      window.location.href = `/onde-descartar?zipCode=${zipCode}&lat=${coordinates.lat}&lng=${coordinates.lng}&categories=${selectedCategories}`;
+      const rediretUrl = `/onde-descartar?${zipcode}&${coordinates}&${categories}`;
+      window.location.href = rediretUrl;
     }
   };
 
@@ -175,47 +115,33 @@ const Search = ({ userZipCode = '', userSelectedCategories = [] }) => {
         <div className={style.search__content}>
           <h2 className="heading">Encontre pontos de coleta próximos a você:</h2>
         </div>
-        <form className={style.search__form} method="GET" onSubmit={handleSubmit}>
-          <div className="field">
-            <label className="label" htmlFor="zipcode">
-              Qual é a sua localização?
-            </label>
-            <input className="input" value={zipCode} onChange={handleZipCodeChange} type="text" name="zipcode" id="zipcode" placeholder="00000-000" minLength="9" maxLength="9" required ref={zipCodeRef} />
-          </div>
-
-          <div className="field" ref={dropdownRef}>
-            <p className="label">O que deseja descartar?</p>
-            <button className="dropdownButton" type="button" aria-expanded={isDropdownOpen} aria-controls="dropdown-content" id="dropdown-button" onClick={handleDropdown} ref={dropdownButtonRef}>
-              {handleDropdownLabel()}
-            </button>
-            <div className="dropdownContent" aria-hidden={!isDropdownOpen} aria-labelledby="dropdown-button" id="dropdown-content" role="dialog">
-              {sortedCategories.map(({ id, label, icon }) => (
-                <Checkbox key={id} id={id} label={label} name={label} icon={icon} onChange={handleCheckboxChange} />
-              ))}
-            </div>
-          </div>
+        <form className={style.search__form} onSubmit={handleSubmit} method="GET">
+          <Input id="zipcode" className="input" label="Qual é a sua localização?" type="text" name="zipcode" value={userZipCode} onChange={handleZipCodeChange} placeholder="00000-000" minLength="9" maxLength="9" required />
+          <MultipleCheckbox id="categories" label={getSelectLabel()}>
+            {categories.map(({ id, label, icon }) => (
+              <Checkbox key={id} id={id} label={label} icon={icon} checked={selectedCategories.includes(id)} onChange={() => handleCategoryChange(id)} />
+            ))}
+          </MultipleCheckbox>
           <footer>
             <Button variant="orange" type="submit">
               Pesquisar
             </Button>
-            <div role="alert" aria-live="assertive" aria-atomic="true" className={style.search__errors}>
-              {isFormValid === false && (
-                <ul className={style.search__errors__list}>
-                  {!isZipCodeValid && (
-                    <li className={style.search__errors__item}>
-                      <img className="icon" src={siren} alt="Ícone de erro" aria-hidden="true" />
-                      Digite um CEP válido
-                    </li>
-                  )}
-                  {!isCategoryValid && (
-                    <li className={style.search__errors__item}>
-                      <img className="icon" src={siren} alt="Ícone de erro" aria-hidden="true" />
-                      Selecione o que deseja descartar
-                    </li>
-                  )}
-                </ul>
-              )}
-            </div>
+            {isFormValid === false && (
+              <ul className={style.search__errors__list}>
+                {!isZipCodeValid && (
+                  <li className={style.search__errors__item}>
+                    <img className="icon" src={siren} alt="Ícone de erro" aria-hidden="true" />
+                    Digite um CEP válido
+                  </li>
+                )}
+                {!isCategorySelected && (
+                  <li className={style.search__errors__item}>
+                    <img className="icon" src={siren} alt="Ícone de erro" aria-hidden="true" />
+                    Selecione o que deseja descartar
+                  </li>
+                )}
+              </ul>
+            )}
           </footer>
         </form>
       </div>

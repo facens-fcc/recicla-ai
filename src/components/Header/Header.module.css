@@ -1,4 +1,4 @@
 .header {
   grid-area: header;
-  padding: var(--spacing-md) var(--side-padding) 3vh;
+  padding: var(--spacing-md) var(--side-spacing) 3vh;
 }

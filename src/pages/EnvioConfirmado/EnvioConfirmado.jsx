@@ -1,14 +1,14 @@
 import React from 'react';
 import Button from '../../components/Button/Button.jsx';
-import style from './PaginaNaoEncontrada.module.css';
+import style from './EnvioConfirmado.module.css';
 
-const PaginaNaoEncontrada = () => {
+const EnvioConfirmado = () => {
   return (
     <main className="main">
       <section className={style.hero}>
         <div className="container">
-          <h1 className="display display--medium">Página não encontrada</h1>
-          <p className={style.hero__description}>A página que você está procurando não existe.</p>
+          <h1 className="display display--medium">Envio confirmado</h1>
+          <p className={style.hero__description}>Seu contato foi enviado com sucesso! Em breve entraremos em contato.</p>
           <Button variant="orange" href="/">
             Voltar para a página inicial
           </Button>
@@ -18,4 +18,4 @@ const PaginaNaoEncontrada = () => {
   );
 };
 
-export default PaginaNaoEncontrada;
+export default EnvioConfirmado;

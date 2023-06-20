@@ -19,7 +19,7 @@
 }
 
 .archive {
-  padding: 0 var(--side-padding) var(--spacing-xxl);
+  padding: 0 var(--side-spacing) var(--spacing-xxl);
 }
 
 .archive__message {
